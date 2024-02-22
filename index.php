@@ -1,30 +1,66 @@
 <?php
-// Connessione al database
-$conn = mysqli_connect("127.0.0.1", "programma", "12345", "digitalgamestore");
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //recupera le variabili
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-// Verifica connessione
-if (!$conn) {
-    die("Connessione al database fallita: " . mysqli_connect_error());
-}
 
-// Inizializza la variabile $selectedTable con il valore predefinito 'utenti'
-$selectedTable = isset($_GET['table']) ? $_GET['table'] : "utenti";
+    // Inizializza la variabile per la connessione
+    $conn = null;
 
-// Esegui le query per ottenere i risultati per ciascuna tabella
-$queryUtenti = "SELECT * FROM utenti";
-$resultUtenti = mysqli_query($conn, $queryUtenti);
+    try {
+        // Tenta di stabilire la connessione al database
+        $conn = new mysqli("127.0.0.1", $username, $password, "digitalgamestore");
 
-$queryProdotti = "SELECT * FROM prodotti";
-$resultProdotti = mysqli_query($conn, $queryProdotti);
+        // Verifica se la connessione è riuscita
+        if ($conn->connect_error) {
+            throw new Exception("Connessione al database non riuscita: " . $conn->connect_error);
+        }
 
-$queryAcquisti = "SELECT * FROM acquisti";
-$resultAcquisti = mysqli_query($conn, $queryAcquisti);
+        // In questo punto, la connessione al database è stata stabilita con successo
 
-$queryPromozioni = "SELECT * FROM promozioni";
-$resultPromozioni = mysqli_query($conn, $queryPromozioni);
+        // Variabile per il nome della tabella predefinita
+        $selectedTable = isset($_GET['table']) ? $_GET['table'] : "utenti";
 
-$queryRecensioni = "SELECT * FROM recensioni";
-$resultRecensioni = mysqli_query($conn, $queryRecensioni);
+        // Query per ottenere gli utenti
+        $queryUtenti = "SELECT * FROM utenti";
+        $resultUtenti = mysqli_query($conn, $queryUtenti);
+
+        // Query per ottenere i prodotti
+        $queryProdotti = "SELECT * FROM prodotti";
+        $resultProdotti = mysqli_query($conn, $queryProdotti);
+
+        // Query per ottenere gli acquisti
+        $queryAcquisti = "SELECT * FROM acquisti";
+        $resultAcquisti = mysqli_query($conn, $queryAcquisti);
+
+        // Query per ottenere le promozioni
+        $queryPromozioni = "SELECT * FROM promozioni";
+        $resultPromozioni = mysqli_query($conn, $queryPromozioni);
+
+        // Query per ottenere le recensioni
+        $queryRecensioni = "SELECT * FROM recensioni";
+        $resultRecensioni = mysqli_query($conn, $queryRecensioni);
+
+    } catch (Exception $e) {
+        // Se si verifica un errore durante la connessione o l'esecuzione delle query
+        echo "Si è verificato un errore: " . $e->getMessage();
+
+        // Chiudi la connessione se è stata aperta
+        if ($conn !== null) {
+            $conn->close();
+        }
+        // Termina l'esecuzione dello script
+        exit();
+    }
+
+    // Continua l'esecuzione dello script qui...
+
+    // Ricorda di chiudere la connessione quando non è più necessaria
+    $conn->close();
+
+
+    }
 ?>
 
 <!DOCTYPE html>
@@ -37,19 +73,19 @@ $resultRecensioni = mysqli_query($conn, $queryRecensioni);
     <!-- visualizza tabelle -->
     <script>
     function showTable(table) {
-        // Nascondi tutti i pulsanti di ricerca
+        //nascondi button ricerca
         document.getElementById('searchButton').style.display = 'none';
 
-        // Nascondi tutte le tabelle
+        //nascondi tabelle
         var tables = document.getElementsByClassName('data-table');
         for (var i = 0; i < tables.length; i++) {
             tables[i].style.display = 'none';
         }
 
-        // Mostra la tabella selezionata
+        //mostra tabella selezionata
         document.getElementById(table).style.display = 'table';
 
-        // Mostra il pulsante di ricerca
+        //mostra pulsante ricerca
         document.getElementById('searchButton').style.display = 'block';
 
         var selectBox = document.getElementById('searchColumn');
@@ -105,7 +141,7 @@ $resultRecensioni = mysqli_query($conn, $queryRecensioni);
 
     <!-- cerca -->
     <script>
-function searchByColumn(input, columnName, tableId) {
+    function searchByColumn(input, columnName, tableId) {
         var inputText = input.value.toLowerCase();
         var table = document.getElementById(tableId);
         var rows = table.getElementsByTagName('tr');
@@ -161,6 +197,8 @@ function searchByColumn(input, columnName, tableId) {
     </script>
 </head>
 <body>
+<p><?php echo "Messaggio di errore: " ?></p>
+    <button onclick="goBack()">Torna indietro</button>
 
     <nav>
         <button onclick="showTable('utenti')">Utenti</button>
@@ -293,8 +331,6 @@ function searchByColumn(input, columnName, tableId) {
         </table>
     </div>
 
-    <?php
-        mysqli_close($conn);
-    ?>
+
 </body>
 </html>
