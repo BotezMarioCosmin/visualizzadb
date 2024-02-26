@@ -1,7 +1,7 @@
 <attributi>
 utenti: gamertag (pk), email, password
 prodotti: prodottoid (pk), nome, prezzo, categoria, sviluppatore, pubblicatore
-promozioni: promozioneid (pk), prodottoid (fk), sconto, datainizio, datafine
+promozioni: promozioneid (pk), sconto, datainizio, datafine
 
 utenti <-(0,n)- recensire -(1,1)-> prodotti
 
