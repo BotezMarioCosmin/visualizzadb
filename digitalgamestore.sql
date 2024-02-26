@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 17, 2024 at 08:39 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Creato il: Feb 26, 2024 alle 11:29
+-- Versione del server: 10.4.32-MariaDB
+-- Versione PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `acquisti`
+-- Struttura della tabella `acquisti`
 --
 
 CREATE TABLE `acquisti` (
@@ -37,18 +37,19 @@ CREATE TABLE `acquisti` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `acquisti`
+-- Dump dei dati per la tabella `acquisti`
 --
 
 INSERT INTO `acquisti` (`acquistoid`, `gamertag`, `prodottoid`, `importo`, `dataacquisto`, `statoordine`) VALUES
 (1, 'DiscoveryCtrl', 3, 59.99, '2024-01-14', 'completato'),
 (2, 'Hero4Hire', 2, 59.99, '2023-12-30', 'in attesa'),
-(3, 'Klondike', 1, 39.99, '2024-01-12', 'completato');
+(3, 'Klondike', 1, 39.99, '2024-01-12', 'completato'),
+(4, 'BananaRunner', 4, 19.99, '2024-02-26', 'completato');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `prodotti`
+-- Struttura della tabella `prodotti`
 --
 
 CREATE TABLE `prodotti` (
@@ -61,41 +62,61 @@ CREATE TABLE `prodotti` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `prodotti`
+-- Dump dei dati per la tabella `prodotti`
 --
 
 INSERT INTO `prodotti` (`prodottoid`, `nome`, `prezzo`, `categoria`, `sviluppatore`, `pubblicatore`) VALUES
 (1, 'battlefield 1', 39.99, 'fps', 'dice', 'electronic arts'),
 (2, 'call of duty : modern warfare', 59.99, 'fps', 'infinity ward', 'activision'),
-(3, 'grand theft auto v', 59.99, 'open world', 'rockstar north', 'rockstar games');
+(3, 'grand theft auto v', 59.99, 'open world', 'rockstar north', 'rockstar games'),
+(4, 'Metro 2033', 19.99, 'survival horror', '4A Games', '4A Games');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `promozioni`
+-- Struttura della tabella `prodotti_promozioni`
+--
+
+CREATE TABLE `prodotti_promozioni` (
+  `idprodotto` int(11) NOT NULL,
+  `idpromozione` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `prodotti_promozioni`
+--
+
+INSERT INTO `prodotti_promozioni` (`idprodotto`, `idpromozione`) VALUES
+(1, 2),
+(2, 1),
+(4, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `promozioni`
 --
 
 CREATE TABLE `promozioni` (
-  `promozioneid` int(11) NOT NULL,
-  `prodottoid` int(11) NOT NULL,
-  `sconto` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
+  `sconto` int(3) NOT NULL,
   `datainizio` date NOT NULL,
   `datafine` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `promozioni`
+-- Dump dei dati per la tabella `promozioni`
 --
 
-INSERT INTO `promozioni` (`promozioneid`, `prodottoid`, `sconto`, `datainizio`, `datafine`) VALUES
-(1, 1, 20, '2024-01-14', '2024-01-21'),
-(2, 2, 33, '2024-01-15', '2024-01-28'),
-(3, 3, 60, '2024-01-01', '2024-01-31');
+INSERT INTO `promozioni` (`id`, `sconto`, `datainizio`, `datafine`) VALUES
+(1, 25, '2024-02-19', '2024-02-23'),
+(2, 30, '2024-02-01', '2024-02-03'),
+(3, 15, '2024-01-01', '2024-01-07');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `recensioni`
+-- Struttura della tabella `recensioni`
 --
 
 CREATE TABLE `recensioni` (
@@ -108,18 +129,19 @@ CREATE TABLE `recensioni` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `recensioni`
+-- Dump dei dati per la tabella `recensioni`
 --
 
 INSERT INTO `recensioni` (`id`, `gamertag`, `prodottoid`, `valutazione`, `commento`, `data`) VALUES
 (1, 'DiscoveryCtrl', 3, 9, 'gioco stupendo', '2024-01-14'),
 (2, 'Hero4Hire', 2, 10, 'bellissimo!', '2024-01-13'),
-(3, 'Klondike', 1, 8, 'divertente', '2024-01-01');
+(3, 'Klondike', 1, 8, 'divertente', '2024-01-01'),
+(4, 'BananaRunner', 4, 10, 'miglior gioco in commercio', '2024-02-27');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `utenti`
+-- Struttura della tabella `utenti`
 --
 
 CREATE TABLE `utenti` (
@@ -129,20 +151,21 @@ CREATE TABLE `utenti` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `utenti`
+-- Dump dei dati per la tabella `utenti`
 --
 
 INSERT INTO `utenti` (`gamertag`, `email`, `password`) VALUES
+('BananaRunner', 'banana@gmail.com', 'banana'),
 ('DiscoveryCtrl', 'nowayof@gmail.com', 'discoveryctrl'),
 ('Hero4Hire', 'lazylife@gmail.com', 'hero4hire'),
 ('Klondike', 'imnotreal@gmail.com', 'klondike');
 
 --
--- Indexes for dumped tables
+-- Indici per le tabelle scaricate
 --
 
 --
--- Indexes for table `acquisti`
+-- Indici per le tabelle `acquisti`
 --
 ALTER TABLE `acquisti`
   ADD PRIMARY KEY (`acquistoid`),
@@ -150,20 +173,26 @@ ALTER TABLE `acquisti`
   ADD KEY `rif_acquistiprodottoid` (`prodottoid`);
 
 --
--- Indexes for table `prodotti`
+-- Indici per le tabelle `prodotti`
 --
 ALTER TABLE `prodotti`
   ADD PRIMARY KEY (`prodottoid`);
 
 --
--- Indexes for table `promozioni`
+-- Indici per le tabelle `prodotti_promozioni`
 --
-ALTER TABLE `promozioni`
-  ADD PRIMARY KEY (`promozioneid`),
-  ADD KEY `rif_promozioniprodottoid` (`prodottoid`);
+ALTER TABLE `prodotti_promozioni`
+  ADD KEY `rif_prodotti` (`idprodotto`),
+  ADD KEY `rif_promozioni` (`idpromozione`);
 
 --
--- Indexes for table `recensioni`
+-- Indici per le tabelle `promozioni`
+--
+ALTER TABLE `promozioni`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indici per le tabelle `recensioni`
 --
 ALTER TABLE `recensioni`
   ADD PRIMARY KEY (`id`),
@@ -171,62 +200,63 @@ ALTER TABLE `recensioni`
   ADD KEY `rif_recensioniprodottoid` (`prodottoid`);
 
 --
--- Indexes for table `utenti`
+-- Indici per le tabelle `utenti`
 --
 ALTER TABLE `utenti`
   ADD PRIMARY KEY (`gamertag`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT per le tabelle scaricate
 --
 
 --
--- AUTO_INCREMENT for table `acquisti`
+-- AUTO_INCREMENT per la tabella `acquisti`
 --
 ALTER TABLE `acquisti`
-  MODIFY `acquistoid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `acquistoid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `prodotti`
+-- AUTO_INCREMENT per la tabella `prodotti`
 --
 ALTER TABLE `prodotti`
-  MODIFY `prodottoid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `prodottoid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `promozioni`
+-- AUTO_INCREMENT per la tabella `promozioni`
 --
 ALTER TABLE `promozioni`
-  MODIFY `promozioneid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `recensioni`
---
-ALTER TABLE `recensioni`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- Constraints for dumped tables
---
-
---
--- Constraints for table `acquisti`
---
-ALTER TABLE `acquisti`
-  ADD CONSTRAINT `rif_acquistigamertag` FOREIGN KEY (`gamertag`) REFERENCES `utenti` (`gamertag`),
-  ADD CONSTRAINT `rif_acquistiprodottoid` FOREIGN KEY (`prodottoid`) REFERENCES `prodotti` (`prodottoid`);
-
---
--- Constraints for table `promozioni`
---
-ALTER TABLE `promozioni`
-  ADD CONSTRAINT `rif_promozioniprodottoid` FOREIGN KEY (`prodottoid`) REFERENCES `prodotti` (`prodottoid`);
-
---
--- Constraints for table `recensioni`
+-- AUTO_INCREMENT per la tabella `recensioni`
 --
 ALTER TABLE `recensioni`
-  ADD CONSTRAINT `rif_recensionigamertag` FOREIGN KEY (`gamertag`) REFERENCES `utenti` (`gamertag`),
-  ADD CONSTRAINT `rif_recensioniprodottoid` FOREIGN KEY (`prodottoid`) REFERENCES `prodotti` (`prodottoid`);
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Limiti per le tabelle scaricate
+--
+
+--
+-- Limiti per la tabella `acquisti`
+--
+ALTER TABLE `acquisti`
+  ADD CONSTRAINT `rif_acquistigamertag` FOREIGN KEY (`gamertag`) REFERENCES `utenti` (`gamertag`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `rif_acquistiprodottoid` FOREIGN KEY (`prodottoid`) REFERENCES `prodotti` (`prodottoid`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `prodotti_promozioni`
+--
+ALTER TABLE `prodotti_promozioni`
+  ADD CONSTRAINT `rif_prodotti` FOREIGN KEY (`idprodotto`) REFERENCES `prodotti` (`prodottoid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `rif_promozioni` FOREIGN KEY (`idpromozione`) REFERENCES `promozioni` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `recensioni`
+--
+ALTER TABLE `recensioni`
+  ADD CONSTRAINT `rif_recensionigamertag` FOREIGN KEY (`gamertag`) REFERENCES `utenti` (`gamertag`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `rif_recensioniprodottoid` FOREIGN KEY (`prodottoid`) REFERENCES `prodotti` (`prodottoid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
